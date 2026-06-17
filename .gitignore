@@ -29,3 +29,9 @@ yarn-error.log*
 # OS files
 .DS_Store
 Thumbs.db
+
+# Project-specific ignores
+lil-agents-main/
+robot-pet/
+implementation_plan.md.resolved
+learn bro.md
