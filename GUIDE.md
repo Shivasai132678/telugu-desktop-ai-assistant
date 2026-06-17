@@ -8,7 +8,7 @@
 ## 📁 Project Structure
 
 ```
-gemma4-wake-bot/
+.
 │
 ├── config.py                  ← Central configuration (wake word, model, TTS, etc.)
 ├── main.py                    ← Orchestrator — runs the full assistant
@@ -62,7 +62,7 @@ ollama list
 ### 3. Create & Activate Virtual Environment
 
 ```bash
-cd "/Users/kmsreenidhi/wake up"
+cd "-telugu-desktop-ai-assistant"
 
 python3 -m venv venv
 source venv/bin/activate
@@ -71,7 +71,6 @@ source venv/bin/activate
 ### 4. Install Python Dependencies
 
 ```bash
-cd gemma4-wake-bot
 pip install -r requirements.txt
 ```
 
