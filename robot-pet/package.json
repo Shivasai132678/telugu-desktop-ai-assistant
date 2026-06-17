@@ -1,0 +1,17 @@
+{
+  "name": "robot-pet",
+  "version": "1.0.0",
+  "description": "A cute desktop robot pet that walks near your dock and wakes up when clicked",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^42.4.0"
+  }
+}

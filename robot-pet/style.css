@@ -1,0 +1,781 @@
+/* ===== Design Tokens ===== */
+:root {
+    --robot-body: #4a90d9;
+    --robot-body-dark: #2d5f8a;
+    --robot-accent: #ff6b9d;
+    --robot-visor: #1a1a3e;
+    --robot-eye: #00ffcc;
+    --robot-eye-sleepy: #667799;
+    --robot-cheek: rgba(255, 107, 157, 0.4);
+    --chest-light: #00ffcc;
+    --chest-light-sleepy: #334455;
+    --ui-text: #e0e8f0;
+    --ui-text-dim: #8899aa;
+    --font-family: 'Outfit', sans-serif;
+    --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== Reset & Transparent Desktop ===== */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: var(--font-family);
+    background: transparent;
+    cursor: default;
+    user-select: none;
+    -webkit-app-region: no-drag;
+}
+
+/* ===== Robot Container ===== */
+.robot-container {
+    position: fixed;
+    z-index: 10;
+    cursor: pointer;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.6);
+    transform-origin: bottom center;
+    transition: none;
+}
+
+.robot-container:hover .robot {
+    filter: drop-shadow(0 0 16px rgba(0, 255, 204, 0.5));
+}
+
+/* ===== Speech Bubble ===== */
+.speech-bubble {
+    position: absolute;
+    top: -55px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    background: rgba(20, 20, 50, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 8px 16px;
+    color: var(--ui-text);
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 12px;
+    height: 12px;
+    background: rgba(20, 20, 50, 0.92);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.speech-bubble.visible {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+}
+
+/* ===== Robot Design ===== */
+.robot {
+    position: relative;
+    width: 90px;
+    height: 155px;
+    transition: filter var(--transition-smooth);
+}
+
+/* Antenna */
+.antenna {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.antenna-ball {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--robot-accent);
+    box-shadow: 0 0 10px var(--robot-accent), 0 0 20px rgba(255, 107, 157, 0.4);
+    animation: antenna-pulse 2s ease-in-out infinite;
+}
+
+.antenna-stick {
+    width: 3px;
+    height: 16px;
+    background: linear-gradient(180deg, var(--robot-body), var(--robot-body-dark));
+    border-radius: 2px;
+}
+
+@keyframes antenna-pulse {
+    0%, 100% { box-shadow: 0 0 10px var(--robot-accent); }
+    50%      { box-shadow: 0 0 20px var(--robot-accent), 0 0 30px rgba(255, 107, 157, 0.5); }
+}
+
+/* Head */
+.head {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 66px;
+    height: 50px;
+    background: linear-gradient(180deg, #5da3e8, var(--robot-body));
+    border-radius: 20px 20px 14px 14px;
+    box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.3);
+    overflow: visible;
+}
+
+/* Visor */
+.visor {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 52px;
+    height: 22px;
+    background: var(--robot-visor);
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 255, 204, 0.1);
+    overflow: hidden;
+}
+
+/* Eyes */
+.eye {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--robot-eye);
+    box-shadow: 0 0 8px var(--robot-eye), 0 0 16px rgba(0, 255, 204, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-smooth);
+}
+
+.pupil {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.15s ease;
+}
+
+/* Mouth */
+.mouth {
+    position: absolute;
+    bottom: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 3px;
+    background: var(--robot-visor);
+    border-radius: 2px;
+    transition: all var(--transition-smooth);
+}
+
+/* Cheeks */
+.cheek {
+    position: absolute;
+    bottom: 6px;
+    width: 10px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--robot-cheek);
+    opacity: 0;
+    transition: opacity var(--transition-smooth);
+}
+
+.left-cheek  { left: 5px; }
+.right-cheek { right: 5px; }
+
+/* Body */
+.body {
+    position: absolute;
+    top: 47px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 54px;
+    height: 50px;
+    background: linear-gradient(180deg, var(--robot-body), var(--robot-body-dark));
+    border-radius: 8px 8px 12px 12px;
+    box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Chest light */
+.chest-light {
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--chest-light);
+    box-shadow: 0 0 10px var(--chest-light), 0 0 20px rgba(0, 255, 204, 0.4);
+    transition: all var(--transition-smooth);
+    animation: chest-glow 3s ease-in-out infinite;
+}
+
+@keyframes chest-glow {
+    0%, 100% { box-shadow: 0 0 10px var(--chest-light); }
+    50%      { box-shadow: 0 0 20px var(--chest-light), 0 0 30px rgba(0, 255, 204, 0.5); }
+}
+
+.chest-panel {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 26px;
+    height: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: center;
+}
+
+.panel-line {
+    width: 100%;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 1px;
+}
+
+/* Arms */
+.arm {
+    position: absolute;
+    top: 8px;
+    width: 14px;
+    height: 32px;
+    background: linear-gradient(180deg, var(--robot-body), var(--robot-body-dark));
+    border-radius: 7px;
+    transform-origin: top center;
+    transition: transform var(--transition-smooth);
+}
+
+.left-arm {
+    left: -16px;
+    animation: arm-swing-left 1.2s ease-in-out infinite;
+}
+
+.right-arm {
+    right: -16px;
+    animation: arm-swing-right 1.2s ease-in-out infinite;
+}
+
+.hand {
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--robot-body);
+    box-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes arm-swing-left {
+    0%, 100% { transform: rotate(15deg); }
+    50%      { transform: rotate(-15deg); }
+}
+
+@keyframes arm-swing-right {
+    0%, 100% { transform: rotate(-15deg); }
+    50%      { transform: rotate(15deg); }
+}
+
+/* Legs */
+.legs {
+    position: absolute;
+    top: 95px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.leg {
+    width: 16px;
+    height: 30px;
+    background: linear-gradient(180deg, var(--robot-body-dark), #1e4060);
+    border-radius: 6px 6px 4px 4px;
+    transform-origin: top center;
+    transition: transform var(--transition-smooth);
+}
+
+.left-leg {
+    animation: leg-walk-left 1.2s ease-in-out infinite;
+}
+
+.right-leg {
+    animation: leg-walk-right 1.2s ease-in-out infinite;
+}
+
+.foot {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 9px;
+    background: #1e4060;
+    border-radius: 4px 4px 6px 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes leg-walk-left {
+    0%, 100% { transform: rotate(-12deg); }
+    50%      { transform: rotate(12deg); }
+}
+
+@keyframes leg-walk-right {
+    0%, 100% { transform: rotate(12deg); }
+    50%      { transform: rotate(-12deg); }
+}
+
+/* Robot Shadow */
+.robot-shadow {
+    display: none;
+}
+
+@keyframes shadow-walk {
+    0%, 100% { transform: translateX(-50%) scaleX(1); }
+    25%      { transform: translateX(-50%) scaleX(0.9); }
+    50%      { transform: translateX(-50%) scaleX(1); }
+    75%      { transform: translateX(-50%) scaleX(0.9); }
+}
+
+/* ===== Robot States ===== */
+
+/* Walking state */
+.robot-container.walking .robot {
+    animation: walk-bob 1.2s ease-in-out infinite;
+}
+
+@keyframes walk-bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-5px); }
+}
+
+/* Sleeping state */
+.robot-container.sleeping .eye {
+    height: 2px;
+    background: var(--robot-eye-sleepy);
+    box-shadow: none;
+}
+
+.robot-container.sleeping .mouth {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--robot-visor);
+}
+
+.robot-container.sleeping .chest-light {
+    background: var(--chest-light-sleepy);
+    box-shadow: 0 0 4px var(--chest-light-sleepy);
+    animation: none;
+}
+
+.robot-container.sleeping .antenna-ball {
+    box-shadow: 0 0 4px rgba(255, 107, 157, 0.2);
+    animation: none;
+    opacity: 0.5;
+}
+
+.robot-container.sleeping .left-arm,
+.robot-container.sleeping .right-arm {
+    animation: none;
+    transform: rotate(0deg);
+}
+
+.robot-container.sleeping .left-leg,
+.robot-container.sleeping .right-leg {
+    animation: none;
+    transform: rotate(0deg);
+}
+
+.robot-container.sleeping .robot {
+    animation: sleep-bob 3s ease-in-out infinite;
+}
+
+.robot-container.sleeping .robot-shadow {
+    animation: none;
+}
+
+@keyframes sleep-bob {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50%      { transform: translateY(3px) rotate(2deg); }
+}
+
+/* Awake state */
+.robot-container.awake .eye {
+    width: 13px;
+    height: 13px;
+    background: var(--robot-eye);
+    box-shadow: 0 0 12px var(--robot-eye), 0 0 24px rgba(0, 255, 204, 0.6);
+}
+
+.robot-container.awake .cheek {
+    opacity: 1;
+}
+
+.robot-container.awake .mouth {
+    width: 16px;
+    height: 8px;
+    border-radius: 0 0 10px 10px;
+    background: var(--robot-visor);
+}
+
+.robot-container.awake .chest-light {
+    background: var(--chest-light);
+    box-shadow: 0 0 14px var(--chest-light), 0 0 28px rgba(0, 255, 204, 0.6);
+}
+
+.robot-container.awake .left-arm {
+    animation: wave-arm 0.6s ease-in-out 3;
+}
+
+.robot-container.awake .right-arm {
+    animation: none;
+    transform: rotate(0deg);
+}
+
+.robot-container.awake .left-leg,
+.robot-container.awake .right-leg {
+    animation: none;
+    transform: rotate(0deg);
+}
+
+.robot-container.awake .robot {
+    animation: awake-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.robot-container.awake .robot-shadow {
+    animation: none;
+}
+
+@keyframes wave-arm {
+    0%, 100% { transform: rotate(0deg); }
+    50%      { transform: rotate(-45deg); }
+}
+
+@keyframes awake-bounce {
+    0%   { transform: translateY(0) scale(1); }
+    30%  { transform: translateY(-18px) scale(1.06); }
+    60%  { transform: translateY(-5px) scale(0.97); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+/* Dancing state */
+.robot-container.dancing .eye {
+    width: 8px;
+    height: 4px;
+    border-radius: 4px 4px 0 0;
+    background: var(--robot-eye);
+    box-shadow: 0 0 12px var(--robot-eye);
+}
+
+.robot-container.dancing .mouth {
+    width: 16px;
+    height: 8px;
+    border-radius: 0 0 10px 10px;
+    background: var(--robot-visor);
+}
+
+.robot-container.dancing .cheek {
+    opacity: 1;
+}
+
+.robot-container.dancing .left-arm {
+    animation: dance-arm-left 0.5s ease-in-out infinite;
+}
+
+.robot-container.dancing .right-arm {
+    animation: dance-arm-right 0.5s ease-in-out infinite;
+}
+
+.robot-container.dancing .left-leg {
+    animation: dance-leg-left 0.5s ease-in-out infinite;
+}
+
+.robot-container.dancing .right-leg {
+    animation: dance-leg-right 0.5s ease-in-out infinite;
+}
+
+.robot-container.dancing .robot {
+    animation: dance-body 0.5s ease-in-out infinite;
+}
+
+.robot-container.dancing .antenna-ball {
+    animation: dance-antenna 0.25s ease-in-out infinite;
+}
+
+.robot-container.dancing .chest-light {
+    animation: dance-chest 0.25s ease-in-out infinite alternate;
+}
+
+@keyframes dance-arm-left {
+    0%, 100% { transform: rotate(-50deg); }
+    50%      { transform: rotate(35deg); }
+}
+
+@keyframes dance-arm-right {
+    0%, 100% { transform: rotate(35deg); }
+    50%      { transform: rotate(-50deg); }
+}
+
+@keyframes dance-leg-left {
+    0%, 100% { transform: rotate(-10deg); }
+    50%      { transform: rotate(10deg); }
+}
+
+@keyframes dance-leg-right {
+    0%, 100% { transform: rotate(10deg); }
+    50%      { transform: rotate(-10deg); }
+}
+
+@keyframes dance-body {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50%      { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes dance-antenna {
+    0%, 100% { background: var(--robot-accent); box-shadow: 0 0 14px var(--robot-accent); }
+    50%      { background: #00ffcc; box-shadow: 0 0 14px #00ffcc; }
+}
+
+@keyframes dance-chest {
+    0%   { background: var(--chest-light); box-shadow: 0 0 14px var(--chest-light); }
+    100% { background: var(--robot-accent); box-shadow: 0 0 14px var(--robot-accent); }
+}
+
+/* Facing direction */
+.robot-container.facing-left .robot {
+    transform: scaleX(-1);
+}
+
+/* Combine facing-left with walking bob */
+.robot-container.walking.facing-left .robot {
+    animation: walk-bob-flip 1.2s ease-in-out infinite;
+}
+
+@keyframes walk-bob-flip {
+    0%, 100% { transform: scaleX(-1) translateY(0); }
+    50%      { transform: scaleX(-1) translateY(-5px); }
+}
+
+/* ===== Zzz Animation (sleep particles) ===== */
+.zzz {
+    position: absolute;
+    font-size: 18px;
+    font-weight: 800;
+    color: rgba(150, 170, 200, 0.8);
+    opacity: 0;
+    pointer-events: none;
+    animation: float-zzz 2.5s ease-out forwards;
+    text-shadow: 0 0 8px rgba(100, 150, 255, 0.3);
+}
+
+@keyframes float-zzz {
+    0%   { opacity: 0; transform: translate(0, 0) scale(0.5) rotate(0deg); }
+    20%  { opacity: 0.8; }
+    100% { opacity: 0; transform: translate(35px, -70px) scale(1.3) rotate(20deg); }
+}
+
+/* ===== Heart particles (awake) ===== */
+.heart-particle {
+    position: absolute;
+    font-size: 18px;
+    opacity: 0;
+    pointer-events: none;
+    animation: float-heart 1.5s ease-out forwards;
+}
+
+@keyframes float-heart {
+    0%   { opacity: 0; transform: translate(0, 0) scale(0.3); }
+    30%  { opacity: 1; transform: translate(var(--dx), -25px) scale(1.1); }
+    100% { opacity: 0; transform: translate(calc(var(--dx) * 2), -70px) scale(0.6); }
+}
+
+/* ===== Music note particles (dancing) ===== */
+.music-note {
+    position: absolute;
+    font-size: 20px;
+    opacity: 0;
+    pointer-events: none;
+    animation: float-note 1.8s ease-out forwards;
+}
+
+@keyframes float-note {
+    0%   { opacity: 0; transform: translate(0, 0) scale(0.5) rotate(0deg); }
+    30%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(var(--dx), -80px) scale(0.8) rotate(var(--rot)); }
+}
+
+/* ===== Click ripple ===== */
+.click-ripple {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--robot-eye);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    animation: ripple-out 0.6s ease-out forwards;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes ripple-out {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+    100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+}
+
+/* ===== Chat Overlay ===== */
+.chat-overlay {
+    position: fixed;
+    transform: translateX(-50%) scale(0.95);
+    width: 280px;
+    max-height: 200px;
+    background: rgba(255, 248, 240, 0.97);
+    border: 1.5px solid #ff8c42;
+    border-radius: 14px;
+    box-shadow:
+        0 0 0 1px rgba(255, 140, 66, 0.08),
+        0 10px 40px rgba(0, 0, 0, 0.25),
+        0 0 30px rgba(255, 140, 66, 0.12);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease, transform 220ms ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-overlay.visible {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    pointer-events: auto;
+}
+
+.chat-header {
+    padding: 8px 12px 6px;
+    font: 700 12px/1 system-ui, sans-serif;
+    color: #e67e22;
+    border-bottom: 1px solid rgba(230, 126, 34, 0.2);
+    flex-shrink: 0;
+    letter-spacing: 0.3px;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 0;
+}
+
+.chat-messages::-webkit-scrollbar {
+    width: 4px;
+}
+.chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+.chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(230, 126, 34, 0.25);
+    border-radius: 2px;
+}
+
+.chat-msg {
+    font: 500 11.5px/1.4 system-ui, sans-serif;
+    padding: 4px 8px;
+    border-radius: 8px;
+    word-break: break-word;
+    max-width: 100%;
+}
+
+.chat-msg--user {
+    background: rgba(255, 140, 66, 0.1);
+    color: #5a3e2b;
+    align-self: flex-start;
+}
+
+.chat-msg--user strong {
+    color: #e67e22;
+    font-weight: 650;
+}
+
+.chat-msg--bot {
+    background: rgba(230, 126, 34, 0.06);
+    color: #4a3525;
+    align-self: flex-start;
+}
+
+.chat-msg--bot strong {
+    color: #d4772a;
+    font-weight: 650;
+}
+
+.chat-thinking {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px 8px;
+    flex-shrink: 0;
+}
+
+.chat-thinking span {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(230, 126, 34, 0.7);
+    animation: chat-think-blink 1.2s ease-in-out infinite;
+}
+
+.chat-thinking span:nth-child(2) { animation-delay: 0.2s; }
+.chat-thinking span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes chat-think-blink {
+    0%, 80%, 100% { opacity: 0.2; transform: scaleY(0.7); }
+    40% { opacity: 1; transform: scaleY(1.2); }
+}
+
+.chat-hint {
+    padding: 4px 12px 7px;
+    font: 400 9.5px/1 system-ui, sans-serif;
+    color: rgba(0, 0, 0, 0.25);
+    text-align: center;
+    flex-shrink: 0;
+}
