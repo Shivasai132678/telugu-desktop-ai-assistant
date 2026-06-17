@@ -13,7 +13,7 @@ env/
 **/*.pyd
 .pytest_cache/
 .ipynb_checkpoints/
-gemma4-wake-bot/.cache/
+.cache/
 
 # Large model files
 **/*.onnx
@@ -32,6 +32,5 @@ Thumbs.db
 
 # Project-specific ignores
 lil-agents-main/
-robot-pet/
 implementation_plan.md.resolved
 learn bro.md
